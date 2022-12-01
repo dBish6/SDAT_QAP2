@@ -6,7 +6,7 @@ This project was made to practice creating a Java REST API with Spring Boot. Thi
 
 Available Endpoints:
 - GET: http://localhost:8080/api/tournaments = All tournaments.
-- GET: http://localhost:8080/api/tournament/__<Id>__ = Single tournament.
+- GET: http://localhost:8080/api/tournament/ <Id> = Single tournament.
 - POST: http://localhost:8080/api/tournament = Create tournamnet.
-- PUT: http://localhost:8080/api/tournament/__<Id>__ = Edit single tournamnet.
-- DELETE: http://localhost:8080/api/tournament/__<Id>__ = Remove single tournamnet.
+- PUT: http://localhost:8080/api/tournament/ <Id> = Edit single tournamnet.
+- DELETE: http://localhost:8080/api/tournament/ <Id> = Remove single tournamnet.
