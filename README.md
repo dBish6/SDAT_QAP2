@@ -2,7 +2,7 @@
 This is my second QAP (Quantitative Assessment Point) project in my Software Design, Architecture, Testing clas from Semester 4 2022. 
 Solfware Development, Keyin Collage
 
-This project was made to practice creating a Java REST API with Spring Boot. This is my first API in Java:)
+This project was made to practice creating a Java REST API with Spring Boot while also running in a Docker Container. This is my first API in Java:)
 
 ## Available Endpoints:
 - GET: `http://localhost:8080/api/tournaments` = All tournaments.
