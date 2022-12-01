@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 @Entity
 // @EnableAutoConfiguration
@@ -15,23 +16,31 @@ public class Tournament {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tournament_id")
     private long Id;
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private String startDate;
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     private String endDate;
-    @Column(name = "location")
+    @Column(name = "location", nullable = false)
     private String location;
-    @Column(name = "entry_fee")
+    @Column(name = "entry_fee", nullable = false)
     private double entryFee;
-    @Column(name = "cash_prize")
+    @Column(name = "cash_prize", nullable = false)
     private double cashPrize;
+    @Transient
+    private HashMap<Integer,String> touraments;
 
     // Constructors
     public Tournament() {
         this.name = null; this.startDate = null; this.endDate = null; this.location = null;
         this.entryFee = 0.0; this.cashPrize = 0.0;
+    }
+
+    public Tournament(Tournament tournament) {
+        this.name = tournament.name; this.startDate = tournament.startDate;
+        this.endDate = tournament.endDate; this.location = tournament.location;
+        this.entryFee = tournament.entryFee; this.cashPrize = tournament.cashPrize;
     }
 
     public Tournament(String name, Date startDate, Date endDate, String location, double entryFee, double cashPrize) {

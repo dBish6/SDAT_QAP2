@@ -1,10 +1,12 @@
 package com.keyin.qap2.tournament.controller;
 
+import com.keyin.qap2.tournament.exceptions.TournamentNotAcceptedException;
 import com.keyin.qap2.tournament.respository.TournamentRepository;
 import com.keyin.qap2.tournament.exceptions.TournamentNotFoundException;
 import com.keyin.qap2.tournament.model.Tournament;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -12,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/")
@@ -20,11 +23,10 @@ public class TournamentController {
     TournamentRepository tournamentRepository;
 
     @GetMapping("/tournaments")
-    public List<Tournament> getAllCities(HttpServletResponse res) {
+    public List<Tournament> getAllCities() {
         List<Tournament> tournaments = (List<Tournament>) tournamentRepository.findAll();
         if (tournaments.isEmpty()) {
-            res.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-            throw new TournamentNotFoundException();
+            throw new TournamentNotAcceptedException();
         }
         return tournaments;
     }
@@ -48,9 +50,10 @@ public class TournamentController {
         String location = tournament.get("location");
         String entryFee = tournament.get("entry_fee");
         String cashPrize = tournament.get("cash_prize");
-        if (name.isEmpty() || startDate.isEmpty() || endDate.isEmpty()
-                || location.isEmpty() || entryFee.isEmpty() || cashPrize.isEmpty()) {
-            throw new TournamentNotFoundException();
+        if (Objects.equals(name, "") || Objects.equals(startDate, "")
+                || Objects.equals(endDate, "") || Objects.equals(location, ""))
+        {
+            throw new TournamentNotAcceptedException();
         }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMMM dd, yyyy");
@@ -68,20 +71,25 @@ public class TournamentController {
     }
 
     @PutMapping("/tournament/{Id}")
-    public Tournament editTournament(@PathVariable String Id,
+    public Tournament editTournament(@PathVariable Long Id,
                                      @RequestBody Tournament newTournament, HttpServletResponse res)
     {
-        long tournamentId = Long.parseLong(Id);
-        return tournamentRepository.findById(tournamentId).map(tournament -> {
-            tournament.setName(newTournament.getName());
-            tournament.setStartDate(newTournament.getStartDate());
-            tournament.setEndDate(newTournament.getEndDate());
-            tournament.setLocation(newTournament.getLocation());
-            tournament.setEntryFee(newTournament.getEntryFee());
-            tournament.setCashPrize(newTournament.getCashPrize());
-            res.setStatus(HttpServletResponse.SC_OK);
-            return tournamentRepository.save(tournament);
-        }).orElseThrow(() -> new TournamentNotFoundException(tournamentId));
+        // long tournamentId = Long.parseLong(Id);
+        return tournamentRepository.findById(Id).map(tournament -> {
+            if (Objects.equals(tournament.getName(), "") || Objects.equals(tournament.getStartDate(), "")
+                    || Objects.equals(tournament.getEndDate(), "")
+                    || Objects.equals(tournament.getLocation(), ""))
+            {
+                throw new TournamentNotAcceptedException();
+            } else {
+                tournament.setStartDate(newTournament.getStartDate());
+                tournament.setEndDate(newTournament.getEndDate());
+                tournament.setLocation(newTournament.getLocation());
+                tournament.setEntryFee(newTournament.getEntryFee());
+                tournament.setCashPrize(newTournament.getCashPrize());
+            return tournamentRepository.save(new Tournament(tournament));
+            }
+        }).orElseThrow(() -> new TournamentNotFoundException(Id));
     }
 
     @DeleteMapping("/tournament/{Id}")
