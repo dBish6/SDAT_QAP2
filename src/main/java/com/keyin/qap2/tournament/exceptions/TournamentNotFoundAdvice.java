@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-// Configuration to render an HTTP statuses.
+// Configuration of exception.
 @ControllerAdvice
 class TournamentNotFoundAdvice {
 

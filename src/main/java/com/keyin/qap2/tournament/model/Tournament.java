@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -28,8 +29,6 @@ public class Tournament {
     private double entryFee;
     @Column(name = "cash_prize", nullable = false)
     private double cashPrize;
-    @Transient
-    private HashMap<Integer,String> touraments;
 
     // Constructors
     public Tournament() {
@@ -107,6 +106,19 @@ public class Tournament {
 
     public void setCashPrize(double cashPrize) {
         this.cashPrize = cashPrize;
+    }
+
+    public void setTourament(ArrayList<String> tournamentArr) {
+//        for (int i = 0; i < tournamentArr.size(); i++) {
+//            newTourament.setTouramentArr(tournamentArr);
+//        }
+        this.Id = Long.parseLong(tournamentArr.get(0));
+        this.name = tournamentArr.get(1);
+        this.startDate = tournamentArr.get(2);
+        this.endDate = tournamentArr.get(3);
+        this.location = tournamentArr.get(4);
+        this.entryFee = Double.parseDouble(tournamentArr.get(5));
+        this.cashPrize = Double.parseDouble(tournamentArr.get(6));
     }
 
     // Custom Methods

@@ -6,15 +6,11 @@ import com.keyin.qap2.tournament.exceptions.TournamentNotFoundException;
 import com.keyin.qap2.tournament.model.Tournament;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/")
@@ -22,6 +18,7 @@ public class TournamentController {
     @Autowired
     TournamentRepository tournamentRepository;
 
+    // Get all Records
     @GetMapping("/tournaments")
     public List<Tournament> getAllCities() {
         List<Tournament> tournaments = (List<Tournament>) tournamentRepository.findAll();
@@ -31,13 +28,14 @@ public class TournamentController {
         return tournaments;
     }
 
+    // Get Certain Record
     @GetMapping("tournament/{Id}")
     public Tournament getTournamentById(@PathVariable String Id) {
-        long tournamentId = Long.parseLong(Id);
-        return tournamentRepository.findById(tournamentId)
-                .orElseThrow(() -> new TournamentNotFoundException(tournamentId));
+        return tournamentRepository.findById(Long.parseLong(Id))
+                .orElseThrow(() -> new TournamentNotFoundException(Long.parseLong(Id)));
     }
 
+    // Create Record
     @PostMapping("/tournament")
     public Tournament createTournament(@RequestBody Map<String, String> tournament, HttpServletResponse res) {
         // Init Variables
@@ -70,30 +68,32 @@ public class TournamentController {
                 endDateParsed, location, entryFeeParsed, cashPrizeParsed));
     }
 
+    // Replace Record
     @PutMapping("/tournament/{Id}")
-    public Tournament editTournament(@PathVariable Long Id,
-                                     @RequestBody Tournament newTournament, HttpServletResponse res)
-    {
-        // long tournamentId = Long.parseLong(Id);
-        return tournamentRepository.findById(Id).map(tournament -> {
-            if (Objects.equals(tournament.getName(), "") || Objects.equals(tournament.getStartDate(), "")
-                    || Objects.equals(tournament.getEndDate(), "")
-                    || Objects.equals(tournament.getLocation(), ""))
-            {
-                throw new TournamentNotAcceptedException();
-            } else {
-                tournament.setStartDate(newTournament.getStartDate());
-                tournament.setEndDate(newTournament.getEndDate());
-                tournament.setLocation(newTournament.getLocation());
-                tournament.setEntryFee(newTournament.getEntryFee());
-                tournament.setCashPrize(newTournament.getCashPrize());
-            return tournamentRepository.save(new Tournament(tournament));
-            }
-        }).orElseThrow(() -> new TournamentNotFoundException(Id));
+    public Tournament editTournament(@PathVariable String Id, @RequestBody Map<String, String> tournament) {
+
+        Tournament specifedTournament = tournamentRepository.findById(Long.parseLong(Id))
+                .orElseThrow(() -> new TournamentNotFoundException());
+        Tournament newTournament = new Tournament();
+
+        ArrayList<String> tournamentArr = new ArrayList<String>();
+        tournamentArr.add(tournament.get("tournament_id"));
+        tournamentArr.add(tournament.get("name"));
+        tournamentArr.add(tournament.get("start_date"));
+        tournamentArr.add(tournament.get("end_date"));
+        tournamentArr.add(tournament.get("location"));
+        tournamentArr.add(tournament.get("entry_fee"));
+        tournamentArr.add(tournament.get("cash_prize"));
+
+        newTournament.setTourament(tournamentArr);
+        tournamentRepository.delete(specifedTournament);
+        System.out.println(newTournament);
+        return tournamentRepository.save(newTournament);
     }
 
+    // Delete Record
     @DeleteMapping("/tournament/{Id}")
-    public void deleteTournament(@PathVariable String Id, HttpServletResponse res) {
+    public void deleteTournament(@PathVariable String Id) {
         Tournament tournament = tournamentRepository.findById(Long.parseLong(Id))
                 .orElseThrow(() -> new TournamentNotFoundException(Long.parseLong(Id)));
         tournamentRepository.delete(tournament);
