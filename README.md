@@ -8,5 +8,5 @@ This project was made to practice creating a Java REST API with Spring Boot whil
 - GET: `http://localhost:8080/api/tournaments` = All tournaments.
 - GET: `http://localhost:8080/api/tournament/<Id>` = Single tournament.
 - POST: `http://localhost:8080/api/tournament` = Create tournamnet.
-- PUT: `http://localhost:8080/api/tournament/<Id>` = Edit single tournamnet.
+- PUT: `http://localhost:8080/api/tournament/<Id>` = Replace single tournamnet.
 - DELETE:`http://localhost:8080/api/tournament/<Id>` = Remove single tournamnet.
