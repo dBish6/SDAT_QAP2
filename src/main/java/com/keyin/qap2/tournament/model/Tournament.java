@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @Entity
-// @EnableAutoConfiguration
 @Table(name = "tournament")
 public class Tournament {
     // Instance Variables
