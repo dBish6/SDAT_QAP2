@@ -12,5 +12,5 @@ This project was made to practice creating a Java REST API with Spring Boot whil
 - DELETE:`http://localhost:8080/api/tournament/<Id>` = Remove single tournamnet.
 
 ## Format for Dates
-MMMMM dd, yyyy
+MMMMM dd, yyyy <br />
 e.g: December 5, 2022
