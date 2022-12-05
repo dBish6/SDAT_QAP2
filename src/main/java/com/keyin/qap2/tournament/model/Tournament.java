@@ -1,12 +1,10 @@
 package com.keyin.qap2.tournament.model;
 
 import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 @Entity
 // @EnableAutoConfiguration
