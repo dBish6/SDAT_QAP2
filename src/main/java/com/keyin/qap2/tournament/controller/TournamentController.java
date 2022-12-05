@@ -70,25 +70,41 @@ public class TournamentController {
 
     // Replace Record
     @PutMapping("/tournament/{Id}")
-    public Tournament editTournament(@PathVariable String Id, @RequestBody Map<String, String> tournament) {
-
-        Tournament specifedTournament = tournamentRepository.findById(Long.parseLong(Id))
+    public Tournament editTournament(@PathVariable String Id,
+                                     @RequestBody Map<String, String> tournament, HttpServletResponse res)
+    {
+        Tournament updateTournament = tournamentRepository.findById(Long.parseLong(Id))
                 .orElseThrow(() -> new TournamentNotFoundException());
-        Tournament newTournament = new Tournament();
+        // Init Variables
+        Date startDateParsed = null; Date endDateParsed = null;
+        double entryFeeParsed = 0; double cashPrizeParsed = 0;
 
-        ArrayList<String> tournamentArr = new ArrayList<String>();
-        tournamentArr.add(tournament.get("tournament_id"));
-        tournamentArr.add(tournament.get("name"));
-        tournamentArr.add(tournament.get("start_date"));
-        tournamentArr.add(tournament.get("end_date"));
-        tournamentArr.add(tournament.get("location"));
-        tournamentArr.add(tournament.get("entry_fee"));
-        tournamentArr.add(tournament.get("cash_prize"));
+        String name = tournament.get("name");
+        String startDate = tournament.get("start_date");
+        String endDate = tournament.get("end_date");
+        String location = tournament.get("location");
+        String entryFee = tournament.get("entry_fee");
+        String cashPrize = tournament.get("cash_prize");
 
-        newTournament.setTourament(tournamentArr);
-        tournamentRepository.delete(specifedTournament);
-        System.out.println(newTournament);
-        return tournamentRepository.save(newTournament);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMMM dd, yyyy");
+        try {
+            startDateParsed = dateFormat.parse(startDate);
+            endDateParsed = dateFormat.parse(endDate);
+            entryFeeParsed = Double.parseDouble(entryFee);
+            cashPrizeParsed = Double.parseDouble(cashPrize);
+        } catch (ParseException e) {
+            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            System.err.println(e.getMessage());
+        }
+
+        updateTournament.setName(name);
+        updateTournament.setStartDate(dateFormat.format(startDateParsed));
+        updateTournament.setEndDate(dateFormat.format(endDateParsed));
+        updateTournament.setLocation(location);
+        updateTournament.setEntryFee(entryFeeParsed);
+        updateTournament.setCashPrize(cashPrizeParsed);
+
+        return tournamentRepository.save(updateTournament);
     }
 
     // Delete Record

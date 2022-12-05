@@ -109,9 +109,6 @@ public class Tournament {
     }
 
     public void setTourament(ArrayList<String> tournamentArr) {
-//        for (int i = 0; i < tournamentArr.size(); i++) {
-//            newTourament.setTouramentArr(tournamentArr);
-//        }
         this.Id = Long.parseLong(tournamentArr.get(0));
         this.name = tournamentArr.get(1);
         this.startDate = tournamentArr.get(2);
