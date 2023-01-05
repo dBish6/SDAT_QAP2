@@ -1,4 +1,6 @@
 # SDAT_QAP2
+__This respository is now archived__ - the project has moved to https://github.com/dBish6/class-work/tree/master/Semester4/SDAT_QAP2.
+
 This is my second QAP (Quantitative Assessment Point) project in my Software Design, Architecture, Testing class from Semester 4 2022. 
 Solfware Development, Keyin Collage
 
